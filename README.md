@@ -1,0 +1,1 @@
+This repository contains Josh Kioke's submission to STAT 545 assignment 3.
