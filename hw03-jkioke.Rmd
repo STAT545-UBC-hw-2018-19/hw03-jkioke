@@ -9,3 +9,16 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(gapminder)
+library(tidyverse)
+
+```
+
+```{r}
+dim(gapminder)
+str(gapminder)
+```
+
+```
+
