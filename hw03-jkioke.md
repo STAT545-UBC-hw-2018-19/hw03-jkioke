@@ -6,7 +6,7 @@ September 29, 2018
 Tasks
 =====
 
-Pick three of the tasks and present a table and a figure for each.
+I explored the Gapminder data set to manipulate and visualize the data contained within. Specifically, I examined life expectancy over time for different continents, the mean life expectancy in a given time period, and looked at how historical events might be represented in this dataset.
 
 ### How is life expectancy changing over time on different continents?
 
@@ -155,14 +155,7 @@ mill %>%
 | Europe    |               74.09846|
 | Oceania   |               76.18625|
 
-``` r
-mill %>% 
-  ggplot(aes(gdpPercap, lifeExp)) +
-  geom_point() + 
-  scale_x_log10()
-```
-
-![](hw03-jkioke_files/figure-markdown_github/unnamed-chunk-7-1.png)
+We could also plot the data in the above table.
 
 ``` r
 mill %>% 
@@ -173,20 +166,39 @@ mill %>%
   labs(x = "Continent", y = "Mean Life Expectancy 1982-1997")
 ```
 
-![](hw03-jkioke_files/figure-markdown_github/unnamed-chunk-8-1.png)
+![](hw03-jkioke_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
 ### The Soviet-Afghan War
 
-In late 1979, the Soviet Union invaded Afghanistan and kept troops deployed there until the late 1980's. Perhaps the effects of this invasion and occupation will be apparent in the Gapminder dataset.
+In late 1979, the Soviet Union invaded Afghanistan and kept troops deployed there until the late 1980s. Perhaps the effects of this invasion and occupation will be apparent in the Gapminder dataset.
 
 ``` r
 gapminder %>% 
   filter(country == "Afghanistan") %>% 
-  ggplot(aes(year, pop)) +
-  geom_point()
+  mutate(popmil = round(pop/10^6,2)) %>% 
+  ggplot(aes(size=gdpPercap, year, popmil)) +
+  geom_point() +
+  labs(x = "Year", y = "Population (millions)")
 ```
 
-![](hw03-jkioke_files/figure-markdown_github/unnamed-chunk-9-1.png)
+![](hw03-jkioke_files/figure-markdown_github/unnamed-chunk-8-1.png)
 
-YEAH
-====
+The data shows a noticeable drop in population in the timeframe of the war in Afghanistan, though effects on GDP per capita and life expectancy were not apparent in the given data. How does the drop in population in Afghanistan between 1977 and 1982 compare to periods of population decline in other countries in Asia?
+
+``` r
+gapminder %>%
+  mutate(changepop = pop - lag(pop)) %>%
+  mutate(percent_change = round(changepop/pop*-100,2)) %>% 
+  arrange(changepop) %>% 
+  filter(changepop < 0 & continent == "Asia", year!=1952) %>% #Some countries had negative change values for the year 1952 because the lag() function subtracted their 1952 population from the 2007 population of another country
+  select(-gdpPercap, -lifeExp) %>% 
+  knitr::kable()
+```
+
+| country            | continent |  year|       pop|  changepop|  percent\_change|
+|:-------------------|:----------|-----:|---------:|----------:|----------------:|
+| Afghanistan        | Asia      |  1982|  12881816|   -1998556|            15.51|
+| Kuwait             | Asia      |  1992|   1418095|    -473392|            33.38|
+| Cambodia           | Asia      |  1977|   6978607|    -471999|             6.76|
+| West Bank and Gaza | Asia      |  1972|   1089572|     -53064|             4.87|
+| Lebanon            | Asia      |  1982|   3086876|     -28911|             0.94|

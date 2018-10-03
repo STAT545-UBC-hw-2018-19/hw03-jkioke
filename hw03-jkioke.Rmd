@@ -12,7 +12,7 @@ suppressPackageStartupMessages(library(tidyverse))
 ```
 
 #Tasks
-Pick three of the tasks and present a table and a figure for each.
+I explored the Gapminder data set to manipulate and visualize the data contained within. Specifically, I examined life expectancy over time for different continents, the mean life expectancy in a given time period, and looked at how historical events might be represented in this dataset.
 
 ###How is life expectancy changing over time on different continents?
 
@@ -76,13 +76,8 @@ mill %>%
   knitr::kable()
 ```
 
+We could also plot the data in the above table.
 
-```{r}
-mill %>% 
-  ggplot(aes(gdpPercap, lifeExp)) +
-  geom_point() + 
-  scale_x_log10()
-```
 ```{r}
 mill %>% 
   group_by(continent) %>% 
@@ -90,10 +85,12 @@ mill %>%
   ggplot(aes(continent, mean_mill_life_exp)) +
   geom_point(size = 3) +
   labs(x = "Continent", y = "Mean Life Expectancy 1982-1997")
+
 ```
 
+
 ###The Soviet-Afghan War
-In late 1979, the Soviet Union invaded Afghanistan and kept troops deployed there until the late 1980's. Perhaps the effects of this invasion and occupation will be apparent in the Gapminder dataset.
+In late 1979, the Soviet Union invaded Afghanistan and kept troops deployed there until the late 1980s. Perhaps the effects of this invasion and occupation will be apparent in the Gapminder dataset.
 
 ```{r}
 gapminder %>% 
@@ -104,8 +101,16 @@ gapminder %>%
   labs(x = "Year", y = "Population (millions)")
 ```
 
-The data shows a noticeable drop in population in the timeframe of the war in Afghanistan, though effects on GDP per capita and life expectancy were not apparent in the given data.
+The data shows a noticeable drop in population in the timeframe of the war in Afghanistan, though effects on GDP per capita and life expectancy were not apparent in the given data. How does the drop in population in Afghanistan between 1977 and 1982 compare to periods of population decline in other countries in Asia?
 
 
-
+```{r}
+gapminder %>%
+  mutate(changepop = pop - lag(pop)) %>%
+  mutate(percent_change = round(changepop/pop*-100,2)) %>% 
+  arrange(changepop) %>% 
+  filter(changepop < 0 & continent == "Asia", year!=1952) %>% #Some countries had negative change values for the year 1952 because the lag() function subtracted their 1952 population from the 2007 population of another country
+  select(-gdpPercap, -lifeExp) %>% 
+  knitr::kable()
+```
 
