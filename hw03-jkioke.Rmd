@@ -9,8 +9,6 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(tidyverse))
-gapminder %>% 
-  arrange(country)
 ```
 
 #Tasks
@@ -26,7 +24,10 @@ gapminder %>%
   labs(x = "Year", y = "Life Expectancy") #To change the axis labels
 
 ```
-We could also choose to represent the different continents on different plots by facetting the data, if the above figure is too visually busy to read.
+
+
+We could also choose to represent the different continents on different plots by facetting the data, if the above figure is too visually busy to read. The figure below separates the data by continent into different plots.
+
 ```{r}
 gapminder %>% 
   ggplot(aes(year,lifeExp)) +
@@ -34,33 +35,45 @@ gapminder %>%
   facet_wrap( ~ continent) +
   labs(x = "Year", y = "Life Expectancy")
 ```
+
+
 Below is a table summarizing the above figures globally.
+
 ```{r}
 gapminder %>% 
   group_by(year) %>% 
-  summarize(mean_life_exp = mean(lifeExp))
+  summarize(mean_life_exp = mean(lifeExp)) %>% 
+  knitr::kable()
 
 ```
-We can also look at the means over time in a table with continents as another variable.
+
+We can also look at how the means change over time in a table with continents as another variable.
+
 ```{r}
 gapminder %>% 
   group_by(year,continent) %>% 
-  summarize(mean_life_exp = mean(lifeExp))
+  summarize(mean_life_exp = mean(lifeExp)) %>% 
+  knitr::kable()
 
 ```
 
 
 ###Mean Life Expectancy, 1982-1997
+
 In order to compute the mean of any data between 1982 and 1997, we first need to filter out other years
+
 ```{r}
 mill <- gapminder %>% 
   filter(year >= 1982 & year <= 1997)
 ```
+
 Now to determine the mean life expectancy of those years.
+
 ```{r}
 mill %>% 
   group_by(continent) %>% 
-  summarize(mean_mill_life_exp = mean(lifeExp))
+  summarize(mean_mill_life_exp = mean(lifeExp)) %>% 
+  knitr::kable()
 ```
 
 
