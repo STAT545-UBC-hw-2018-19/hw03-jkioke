@@ -92,4 +92,20 @@ mill %>%
   labs(x = "Continent", y = "Mean Life Expectancy 1982-1997")
 ```
 
+###The Soviet-Afghan War
+In late 1979, the Soviet Union invaded Afghanistan and kept troops deployed there until the late 1980's. Perhaps the effects of this invasion and occupation will be apparent in the Gapminder dataset.
+
+```{r}
+gapminder %>% 
+  filter(country == "Afghanistan") %>% 
+  mutate(popmil = round(pop/10^6,2)) %>% 
+  ggplot(aes(size=gdpPercap, year, popmil)) +
+  geom_point() +
+  labs(x = "Year", y = "Population (millions)")
+```
+
+The data shows a noticeable drop in population in the timeframe of the war in Afghanistan, though effects on GDP per capita and life expectancy were not apparent in the given data.
+
+
+
 

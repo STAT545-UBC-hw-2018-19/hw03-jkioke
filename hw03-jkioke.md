@@ -174,3 +174,19 @@ mill %>%
 ```
 
 ![](hw03-jkioke_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
+### The Soviet-Afghan War
+
+In late 1979, the Soviet Union invaded Afghanistan and kept troops deployed there until the late 1980's. Perhaps the effects of this invasion and occupation will be apparent in the Gapminder dataset.
+
+``` r
+gapminder %>% 
+  filter(country == "Afghanistan") %>% 
+  ggplot(aes(year, pop)) +
+  geom_point()
+```
+
+![](hw03-jkioke_files/figure-markdown_github/unnamed-chunk-9-1.png)
+
+YEAH
+====
